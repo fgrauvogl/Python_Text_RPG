@@ -1,1 +1,2 @@
-# Python_Text_RPG
+# Python_Text_RPG ©
+
