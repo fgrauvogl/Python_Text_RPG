@@ -216,21 +216,26 @@ def explore():
     classY_button.destroy()
     classN_button.destroy()
 
-    a_intro = LabelFrame(journal_frame,
-                         text="In order to survive the harsh wilds of your homeland you learned archery.\n"
-                              "Your eyesight is keen and you wit sharp.\n"
-                              "You've gain a sense of distance from the world.\n"
-                              "Woken up by the sound of screams nearby, \n"
-                              "you stretch out of the position you held at a tree.\n"
-                              "They seem to be coming from the nearby town.\n"
-                              "What do you do?", font='Courier 13', pady=20)
-    war_intro = Label(journal_frame,
-                      text="You're strong, stronger than the rest. Brawn was always a feature you've envied.\n"
-                           "You're swing is enough to take down an orc.\n"
-                           "There are many who look up to strength.\n"
-                           "In the distance there are screams coming from center square.\n"
-                           "What do you do?", font='Courier 13', pady=20)
-    wiz_intro = Label(journal_frame, text="e", font='Courier 13', pady=20)
+a_intro = LabelFrame(journal_frame,
+                     text="Surviving the harsh wilds of your homeland taught you archery.\n"
+                          "Your eyes are keen, your wit sharp.\n"
+                          "You've gained a sense of distance from the world.\n"
+                          "Screams nearby jolt you awake, and you stretch out\n"
+                          "from the spot you'd been holding against a tree.\n"
+                          "The sound seems to be coming from the nearby town.\n"
+                          "What do you do?",
+                     font='Courier 13', pady=20)
+
+war_intro = Label(journal_frame,
+                  text="You're strong — stronger than the rest. Brawn was always\n"
+                       "the one feature you envied.\n"
+                       "Your swing is enough to take down an orc.\n"
+                       "Many look up to strength.\n"
+                       "In the distance, screams echo from the center square.\n"
+                       "What do you do?",
+                  font='Courier 13', pady=20)
+
+wiz_intro = Label(journal_frame, text="e", font='Courier 13', pady=20)
 
     if is_archer:
         a_intro.pack()
