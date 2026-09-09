@@ -126,35 +126,32 @@ start_button = Button(game_window, image=sword, justify='center', command=clear_
 start_button.pack(side=BOTTOM, pady=50)
 
 # Main Tab First Story Lines
-first_story = Label(main_frame, text='Long ago when swords and magic existed, three legendary leaders existed.\n\n\n'
-                                     'The honorable Nephetus from Drumilin.\n\n\n'
-                                     'The barbaric Thesius from Northgaul.\n\n\n'
-                                     'The princess Lorica from Ancora.', pady=40,
+first_story = Label(main_frame, text='In an age when steel sang and sorcery ran deep, three sovereigns held the realm.\n\n\n'
+                                     'The steadfast Aldric of Velmora.\n\n\n'
+                                     'The untamed Kaelen of Duskreach.\n\n\n'
+                                     'The queen Seraphine of Aurelia.', pady=40,
                     font='Courier 13')
 first_story.pack(pady=10)
 
-second_story = Label(main_frame, text='The three kingdoms were at peace with the land for many years.\n\n\n'
-                                      'During the rule of the three there was a sickness that struck the land.\n\n\n'
-                                      'Living beings that were affected grew in size and strength.\n\n\n'
-                                      'Household felines became predators, humans lost their sense of self,\n\n\n'
-                                      'and even common rats became a danger.', pady=40, font='Courier 13')
+second_story = Label(main_frame, text='For generations the lands rested in quiet harmony under their watch.\n\n\n'
+                                      'Then a creeping blight seeped into the soil and the blood alike.\n\n\n'
+                                      'Those it touched swelled beyond all natural measure.\n\n\n'
+                                      'Garden hounds turned ravenous, citizens forgot their own names,\n\n\n'
+                                      'and field mice grew large enough to drag travelers down.', pady=40, font='Courier 13')
 
-third_story = Label(main_frame, text='The leaders took up their arms and \n\n'
-                                     'went to war with the abominations.\n\n'
-                                     'The many deaths that happened after included Thesius.\n\n'
-                                     'Although hope may have seemed lost a guild was started by Nephetus.\n\n'
-                                     'One that vowed to the eradication of this sickness.\n\n'
-                                     'Through the organization of this guild many discoveries were made. \n\n'
-                                     'Lorica, on the other hand, introduced democracy to the masses. \n\n'
-                                     'With the organization between the two the kingdoms felt they had a chance.\n\n'
-                                     'Still the sickness ravages... \n\n'
-                                     ' there are few who take a stand to reclaim lost land.\n\n',
-                    pady=40, font='Courier 13')
+third_story = Label(main_frame, text='The three drew their blades and marched against the corrupted horde.\n\n\n'
+                                     'Kaelen fell in the second week, his body consumed by the very rot he fought.\n\n\n'
+                                     'Yet from the ashes of that defeat, Aldric forged an order.\n\n\n'
+                                     'Sworn hunters bound to purge the blight from every corner of the land.\n\n\n'
+                                     'Their expeditions uncovered old wards and forgotten cures.\n\n\n'
+                                     'Seraphine, meanwhile, opened the council halls to common folk.\n\n\n'
+                                     'Together their efforts gave the kingdoms something they had not felt in years:\n\n\n'
+                                     'a reason to hold the line. Still the blight spreads...\n\n\n'
+                                     'few remain willing to walk into its shadow.', pady=40, font='Courier 13')
 
-fourth_story = Label(main_frame, text='This is where you come in to our story.\n\n\n'
-                                      'Choose who you will become and uncover the mystery of Turnika.\n\n\n',
+fourth_story = Label(main_frame, text='Now the tale reaches your hands.\n\n\n'
+                                      'Choose who you will become and unravel the truth behind Veyra.\n\n\n',
                      pady=40, font='Courier 13')
-
 
 def move_screens1():
     first_story.destroy()
