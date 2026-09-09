@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 import random
-import Monsters
+#import Monsters
 
 # ---------------------------------------------------------------------------
 # Level "progress" numbers
@@ -16,6 +16,7 @@ level_nums = {
     1: random.randint(1, 8),
     2: random.randint(8, 16),
     3: random.randint(16, 24),
+}
 
 level_nums = {
     1: random.randint(1, 8),
@@ -65,15 +66,15 @@ def gain_health(level):
 # ---------------------------------------------------------------------------
 
 class Character:
-    def__init__(self, name, max_health):
-    self.name = name
-    self.max_health = max_health
-    self.health = max_health
+    def __init__(self, name: str, max_health: int):
+        self.name = name
+        self.max_health = max_health
+        self.health = max_health
 
 def lose_health(self, amount):
     self.health = max(0, self.health - amount)
 
-def gain_health(self, amount)
+def gain_health(self, amount):
     self.health = min(self.max_health, self.health + amount)
 
 def __repr__(self):
