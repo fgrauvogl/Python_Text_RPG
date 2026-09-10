@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Python_Text_RPG.iml" filepath="$PROJECT_DIR$/.idea/Python_Text_RPG.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/python-text-rpg.iml" filepath="$PROJECT_DIR$/.idea/python-text-rpg.iml" />
     </modules>
   </component>
 </project>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Blight of Veyra</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=EB+Garamond:ital@0;1&display=swap');
+
+  :root{
+    --ink:#e8e2d0;
+    --ink-dim:#a99f88;
+    --bg:#14170f;
+    --bg-panel:#1b1f15;
+    --moss:#5c6b45;
+    --rot:#7a3b2e;
+    --rule:#3a4130;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      radial-gradient(ellipse at top, rgba(92,107,69,0.10), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(122,59,46,0.08), transparent 55%);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    font-size:19px;
+    line-height:1.75;
+  }
+
+  .page{
+    max-width:680px;
+    margin:0 auto;
+    padding:6rem 1.5rem 8rem;
+  }
+
+  .crest{
+    text-align:center;
+    color:var(--moss);
+    font-size:1.4rem;
+    letter-spacing:0.6em;
+    margin-bottom:2.5rem;
+  }
+
+  h1.title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-style:italic;
+    font-size:3.4rem;
+    text-align:center;
+    margin:0 0 0.3rem;
+    color:var(--ink);
+  }
+
+  .subtitle{
+    text-align:center;
+    color:var(--ink-dim);
+    font-style:italic;
+    margin:0 0 4rem;
+    font-size:1.05rem;
+  }
+
+  .divider{
+    width:120px;
+    height:1px;
+    background:var(--rule);
+    margin:3.5rem auto;
+  }
+
+  section{
+    margin-bottom:1rem;
+  }
+
+  h2{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.7rem;
+    color:var(--moss);
+    margin:0 0 1.4rem;
+  }
+
+  section:nth-of-type(3) h2{
+    color:var(--rot);
+  }
+
+  p{
+    margin:0 0 1.2rem;
+    color:var(--ink);
+  }
+
+  p:last-child{
+    margin-bottom:0;
+  }
+
+  .kings{
+    margin:1.5rem 0 0.5rem;
+    padding-left:0;
+    list-style:none;
+  }
+
+  .kings li{
+    padding:0.35rem 0 0.35rem 1.2rem;
+    border-left:2px solid var(--rule);
+    margin-bottom:0.5rem;
+    font-style:italic;
+    color:var(--ink-dim);
+  }
+
+  .kings li strong{
+    font-style:normal;
+    color:var(--ink);
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:1.05rem;
+  }
+
+  .fallen{
+    color:var(--rot);
+    opacity:0.85;
+  }
+
+  .call{
+    text-align:center;
+    margin-top:4.5rem;
+  }
+
+  .call h2{
+    color:var(--ink);
+    text-align:center;
+  }
+
+  .call p{
+    color:var(--ink-dim);
+    font-style:italic;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="crest">VEYRA</div>
+  <h1 class="title">The Blight of Veyra</h1>
+  <p class="subtitle">a tale of three sovereigns</p>
+
+  <section>
+    <h2>The Three Sovereigns</h2>
+    <p>In an age when steel sang and sorcery ran deep, three sovereigns held the realm.</p>
+    <ul class="kings">
+      <li><strong>The Steadfast</strong> — Aldric of Velmora</li>
+      <li><strong>The Untamed</strong> — Kaelen of Duskreach</li>
+      <li><strong>The Queen</strong> — Seraphine of Aurelia</li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <h2>The Blight</h2>
+    <p>For generations the lands rested in quiet harmony under their watch.</p>
+    <p>Then a creeping blight seeped into the soil and the blood alike. Those it touched swelled beyond all natural measure.</p>
+    <p>Garden hounds turned ravenous, citizens forgot their own names, and field mice grew large enough to drag travelers down.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section>
+    <h2>The Reckoning</h2>
+    <p>The three drew their blades and marched against the corrupted horde.</p>
+    <p class="fallen">Kaelen fell in the second week, his body consumed by the very rot he fought.</p>
+    <p>Yet from the ashes of that defeat, Aldric forged an order — sworn hunters bound to purge the blight from every corner of the land. Their expeditions uncovered old wards and forgotten cures.</p>
+    <p>Seraphine, meanwhile, opened the council halls to common folk.</p>
+    <p>Together their efforts gave the kingdoms something they had not felt in years: a reason to hold the line. Still the blight spreads... few remain willing to walk into its shadow.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="call">
+    <h2>Your Story Begins</h2>
+    <p>Now the tale reaches your hands.</p>
+    <p>Choose who you will become and unravel the truth behind Veyra.</p>
+  </section>
+
+</div>
+</body>
+</html>

@@ -1,29 +1,20 @@
-import tkinter as tk
-from tkinter import *
-from tkinter import ttk
-from PIL import ImageTk, Image
 import random
-import pygame
-#import Monsters
+
+from kivy.app import App
+from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.properties import StringProperty, ObjectProperty, BooleanProperty
+from kivy.uix.tabbedpanel import TabbedPanel
 
 # ---------------------------------------------------------------------------
 # Level "progress" numbers
 # ---------------------------------------------------------------------------
-
-level_1num = random.randint(1, 8)
-level_2num = random.randint(8, 16)
-level_3num = random.randint(16, 24)
 
 level_nums = {
     1: random.randint(1, 8),
     2: random.randint(8, 16),
     3: random.randint(16, 24),
 }
-
-# high        -> value that counts as "too high", gets reset to high_reset
-# equal       -> a specific value that snaps to equal_reset (None if unused)
-# low         -> value below which it's treated as a miss and zeroed
-# gain_low    -> value below which gaining resets to gain_low_reset
 
 LEVEL_RULES = {
     1: {"high": 8, "high_reset": 6, "equal": 0, "equal_reset": 0,
@@ -61,6 +52,7 @@ def gain_health(level):
 # Character model
 # ---------------------------------------------------------------------------
 
+
 class Character:
     def __init__(self, name: str, max_health: int):
         self.name = name
@@ -76,261 +68,292 @@ class Character:
     def __repr__(self):
         return f"Character({self.name}, {self.health}/{self.max_health})"
 
+
 CLASS_MAX_HEALTH = {
     "warrior": 200,
     "archer": 120,
     "wizard": 100,
 }
 
-
-def get_screen_dimensions():
-    return {'width': int(pygame.display.Info().current_w), 'height': int(pygame.display.Info().current_h)}
-
-# ---------------------------------------------------------------------------
-# Window / tabs / images
-# ---------------------------------------------------------------------------
-screen_dimensions = get_screen_dimensions()
-width = screen_dimensions['width']
-height = screen_dimensions['height']
-
-game_window = tk.Tk()
-game_window.title('Turnika')
-game_window.geometry("2560x1440")
-
-def main():
-    print(f"Screen Resolution: {width} x {height}")
-
-if __name__ == "__main__":
-    pygame.init()
-
-tabs = ttk.Notebook(game_window)
-tabs.pack(pady=5)
-
-sword = ImageTk.PhotoImage(Image.open('Sword_New.png'))
-map_img = ImageTk.PhotoImage(Image.open('Map.png'))
-warrior_img = ImageTk.PhotoImage(Image.open('Warrior.png'))
-archer_img = ImageTk.PhotoImage(Image.open('Archer.png'))
-wizard_img = ImageTk.PhotoImage(Image.open('Wizard.png'))
-
-main_frame = Frame(tabs, width=800, height=540)
-inventory_frame = Frame(tabs, width=800, height=540)
-map_frame = Frame(tabs, width=800, height=540)
-journal_frame = Frame(tabs, width=800, height=540)
-
-map_label = Label(map_frame, image=map_img)
-map_label.pack(pady=0)
-
-# ---------------------------------------------------------------------------
-# Start screen
-# ---------------------------------------------------------------------------
-
-def clear_start():
-    tabs.add(main_frame, text='Main')
-    welcome_label.forget()
-    start_label.forget()
-    start_button.forget()
-
-
-welcome_label = tk.Label(game_window, text="Welcome to Turnika", font='Courier 18 bold')
-welcome_label.pack(pady=10)
-
-start_label = tk.Label(game_window, text='Start', font='Courier 18 bold', justify='center')
-start_label.pack(side="bottom", pady=25)
-
-start_button = tk.Button(game_window, image=sword, justify='center', command=clear_start, cursor='hand2')
-start_button.pack(side="bottom")
-
-# Main Tab First Story Lines
-first_story = tk.Label(main_frame, text='In an age when steel sang and sorcery ran deep, three sovereigns held the realm.\n\n\n'
-                                     'The steadfast Aldric of Velmora.\n\n\n'
-                                     'The untamed Kaelen of Duskreach.\n\n\n'
-                                     'The queen Seraphine of Aurelia.', pady=40, padx=50,
-                    font='Courier 13')
-first_story.pack(pady=40,padx=50)
-
-second_story = tk.Label(main_frame, text='For generations the lands rested in quiet harmony under their watch.\n\n\n'
-                                      'Then a creeping blight seeped into the soil and the blood alike.\n\n\n'
-                                      'Those it touched swelled beyond all natural measure.\n\n\n'
-                                      'Garden hounds turned ravenous, citizens forgot their own names,\n\n\n'
-                                      'and field mice grew large enough to drag travelers down.', pady=40, font='Courier 13')
-
-third_story = tk.Label(main_frame, text='The three drew their blades and marched against the corrupted horde.\n\n\n'
-                                     'Kaelen fell in the second week, his body consumed by the very rot he fought.\n\n\n'
-                                     'Yet from the ashes of that defeat, Aldric forged an order.\n\n\n'
-                                     'Sworn hunters bound to purge the blight from every corner of the land.\n\n\n'
-                                     'Their expeditions uncovered old wards and forgotten cures.\n\n\n'
-                                     'Seraphine, meanwhile, opened the council halls to common folk.\n\n\n'
-                                     'Together their efforts gave the kingdoms something they had not felt in years:\n\n\n'
-                                     'a reason to hold the line. Still the blight spreads...\n\n\n'
-                                     'few remain willing to walk into its shadow.', pady=40, font='Courier 13')
-
-fourth_story = tk.Label(main_frame, text='Now the tale reaches your hands.\n\n\n'
-                                      'Choose who you will become and unravel the truth behind Veyra.\n\n\n',
-                     pady=40, font='Courier 13')
-
-story_screens = [first_story, second_story, third_story, fourth_story]
-story_index = 0
-
-first_story.pack(pady=10)  # starting screen
-
-
-def advance_story():
-    global story_index
-    story_screens[story_index].destroy()
-    story_index += 1
-
-    if story_index < len(story_screens):
-        story_screens[story_index].pack(pady=10)
-        update_back_button()
-    else:
-        continue_button.destroy()
-        back_button.destroy()
-        finish_intro()
-
-
-def go_back():
-    global story_index
-    story_screens[story_index].destroy()
-    story_index -= 1
-    story_screens[story_index].pack(pady=10)
-    update_back_button()
-
-
-def update_back_button():
-    # Disable Back on the very first screen -- nothing earlier to return to.
-    back_button.config(state='disabled' if story_index == 0 else 'normal')
-
-
-def finish_intro():
-    tabs.add(inventory_frame, text='Inventory')
-    tabs.add(map_frame, text='Map')
-    tabs.add(journal_frame, text='Journal')
-    choose_label.pack(pady=10)
-    warrior_button.pack(pady=20)
-    archer_button.pack(pady=30)
-    wizard_button.pack(pady=40)
-
-
-continue_button = tk.Button(main_frame, text='Continue', command=advance_story, cursor='hand2')
-continue_button.pack(side="right", padx=15)
-
-back_button = tk.Button(main_frame, text='Back', command=go_back, cursor='hand2', state='disabled')
-back_button.pack(side="left", padx=15)
-
-
-# ---------------------------------------------------------------------------
-# Class intro screens (journal tab)
-# ---------------------------------------------------------------------------
-
-a_intro = tk.LabelFrame(journal_frame,
-                     text="Surviving the harsh wilds of your homeland taught you archery.\n"
-                          "Your eyes are keen, your wit sharp.\n"
-                          "You've gained a sense of distance from the world.\n"
-                          "Screams nearby jolt you awake, and you stretch out\n"
-                          "from the spot you'd been holding against a tree.\n"
-                          "The sound seems to be coming from the nearby town.\n"
-                          "What do you do?",
-                     font='Courier 13', pady=20)
-
-war_intro = tk.Label(journal_frame,
-                  text="You're strong — stronger than the rest. Brawn was always\n"
-                       "the one feature you envied.\n"
-                       "Your swing is enough to take down an orc.\n"
-                       "Many look up to strength.\n"
-                       "In the distance, screams echo from the center square.\n"
-                       "What do you do?",
-                  font='Courier 13', pady=20)
-
-wiz_intro = tk.Label(journal_frame, text="e", font='Courier 13', pady=20)
-
-
-def explore():
-    # Tear down the class-selection confirmation widgets...
-    choose_label.destroy()
-    warrior_button.destroy()
-    archer_button.destroy()
-    wizard_button.destroy()
-    warrior_header.destroy()
-    display_warrior.destroy()
-    archer_header.destroy()
-    display_archer.destroy()
-    wizard_header.destroy()
-    display_wizard.destroy()
-    classY_button.destroy()
-    classN_button.destroy()
-
-    # ...then show the matching journal intro. This is the block that was
-    # previously floating outside any function (the IndentationError) and
-    # checking is_archer/is_warrior/is_wizard flags that never got set.
-    if current_class == "archer":
-        a_intro.pack()
-    elif current_class == "warrior":
-        war_intro.pack()
-    elif current_class == "wizard":
-        wiz_intro.pack()
-
-# ---------------------------------------------------------------------------
-# Choose character
-# ---------------------------------------------------------------------------
-
-display_warrior = tk.Label(main_frame, image=warrior_img)
-warrior_header = tk.Label(main_frame, text='You have chosen the warrior class?', font='Courier 18 bold', pady=10)
-display_archer = tk.Label(main_frame, image=archer_img)
-archer_header = tk.Label(main_frame, text='You have chosen the archer class?', font='Courier 18 bold', pady=10)
-display_wizard = tk.Label(main_frame, image=wizard_img)
-wizard_header = tk.Label(main_frame, text='You have chosen the wizard class?', font='Courier 18 bold', pady=10)
-
-classY_button = tk.Button(main_frame, text='Yes', font='Courier 11 bold', cursor='hand2', padx=60, command=explore)
-classN_button = tk.Button(main_frame, text=' No ', font='Courier 11 bold', cursor='hand2', padx=20, command=lambda: return_screen())
-
-choose_label = tk.Label(main_frame, text='Choose Your Character!', justify='center', font='Courier 18 bold')
-
-warrior_button = tk.Button(main_frame, pady=10, text='Warrior', command=lambda: choose_class('warrior'),
-                        cursor='hand2', font='Courier 18 bold')
-archer_button = tk.Button(main_frame, pady=10, text='Archer', command=lambda: choose_class('archer'),
-                       cursor='hand2', font='Courier 18 bold')
-wizard_button = tk.Button(main_frame, pady=10, text='Wizard', command=lambda: choose_class('wizard'),
-                       cursor='hand2', font='Courier 18 bold')
-
-CLASS_WIDGETS = {
-    "warrior": (warrior_header, display_warrior),
-    "archer": (archer_header, display_archer),
-    "wizard": (wizard_header, display_wizard),
+CLASS_INTROS = {
+    "archer": ("Surviving the harsh wilds of your homeland taught you archery.\n"
+               "Your eyes are keen, your wit sharp.\n"
+               "You've gained a sense of distance from the world.\n"
+               "Screams nearby jolt you awake, and you stretch out\n"
+               "from the spot you'd been holding against a tree.\n"
+               "The sound seems to be coming from the nearby town.\n"
+               "What do you do?"),
+    "warrior": ("You're strong -- stronger than the rest. Brawn was always\n"
+                "the one feature you envied.\n"
+                "Your swing is enough to take down an orc.\n"
+                "Many look up to strength.\n"
+                "In the distance, screams echo from the center square.\n"
+                "What do you do?"),
+    "wizard": "Write the wizard intro here (same length/voice as the others).",
 }
 
+STORY_PAGES = [
+    "In an age when steel sang and sorcery ran deep, three sovereigns held the realm.\n\n"
+    "The steadfast Aldric of Velmora.\n\n"
+    "The untamed Kaelen of Duskreach.\n\n"
+    "The queen Seraphine of Aurelia.",
 
-def choose_class(class_name):
-    global current_class, player
-    current_class = class_name
-    player = Character(class_name, CLASS_MAX_HEALTH[class_name])
+    "For generations the lands rested in quiet harmony under their watch.\n\n"
+    "Then a creeping blight seeped into the soil and the blood alike.\n\n"
+    "Those it touched swelled beyond all natural measure.\n\n"
+    "Garden hounds turned ravenous, citizens forgot their own names,\n\n"
+    "and field mice grew large enough to drag travelers down.",
 
-    choose_label.forget()
-    warrior_button.forget()
-    archer_button.forget()
-    wizard_button.forget()
+    "The three drew their blades and marched against the corrupted horde.\n\n"
+    "Kaelen fell in the second week, his body consumed by the very rot he fought.\n\n"
+    "Yet from the ashes of that defeat, Aldric forged an order.\n\n"
+    "Sworn hunters bound to purge the blight from every corner of the land.\n\n"
+    "Their expeditions uncovered old wards and forgotten cures.\n\n"
+    "Seraphine, meanwhile, opened the council halls to common folk.\n\n"
+    "Together their efforts gave the kingdoms something they had not felt in years:\n\n"
+    "a reason to hold the line. Still the blight spreads...\n\n"
+    "few remain willing to walk into its shadow.",
 
-    header, display = CLASS_WIDGETS[class_name]
-    header.pack()
-    display.pack()
-    classY_button.pack()
-    classN_button.pack()
-
-
-def return_screen():
-    global current_class, player
-    choose_label.pack(pady=10)
-    warrior_button.pack(pady=20)
-    archer_button.pack(pady=30)
-    wizard_button.pack(pady=40)
-
-    for header, display in CLASS_WIDGETS.values():
-        header.forget()
-        display.forget()
-    classY_button.forget()
-    classN_button.forget()
-
-    current_class = None
-    player = None
+    "Now the tale reaches your hands.\n\n"
+    "Choose who you will become and unravel the truth behind Veyra.",
+]
 
 
-game_window.mainloop()
+
+KV = """
+<StartScreen>:
+    name: 'start'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
+        Label:
+            text: 'Welcome to Turnika'
+            font_size: '28sp'
+            bold: True
+        Widget:
+        Button:
+            text: 'Start'
+            size_hint: (0.4, 0.15)
+            pos_hint: {'center_x': 0.5}
+            on_press: root.manager.current = 'story'
+
+<StoryScreen>:
+    name: 'story'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
+        Label:
+            id: story_label
+            text: root.page_text
+            font_size: '18sp'
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.width, None
+        BoxLayout:
+            size_hint_y: 0.15
+            spacing: 20
+            Button:
+                text: 'Back'
+                disabled: root.at_first_page
+                on_press: root.go_back()
+            Button:
+                text: 'Continue'
+                on_press: root.advance()
+
+<ClassSelectScreen>:
+    name: 'class_select'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
+        Label:
+            text: 'Choose Your Character!'
+            font_size: '24sp'
+            bold: True
+            size_hint_y: 0.2
+        Button:
+            text: 'Warrior'
+            font_size: '20sp'
+            on_press: root.choose_class('warrior')
+        Button:
+            text: 'Archer'
+            font_size: '20sp'
+            on_press: root.choose_class('archer')
+        Button:
+            text: 'Wizard'
+            font_size: '20sp'
+            on_press: root.choose_class('wizard')
+
+<ClassConfirmScreen>:
+    name: 'class_confirm'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
+        Label:
+            text: root.confirm_text
+            font_size: '22sp'
+            bold: True
+            size_hint_y: 0.15
+        Image:
+            id: class_image
+            source: root.image_source
+        BoxLayout:
+            size_hint_y: 0.15
+            spacing: 20
+            Button:
+                text: 'Yes'
+                on_press: root.confirm_yes()
+            Button:
+                text: 'No'
+                on_press: root.confirm_no()
+
+<JournalIntroScreen>:
+    name: 'journal_intro'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 40
+        spacing: 20
+        Label:
+            text: root.intro_text
+            font_size: '18sp'
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.width, None
+        Button:
+            text: 'Enter the world'
+            size_hint_y: 0.15
+            on_press: root.manager.current = 'game'
+
+<GameScreen>:
+    name: 'game'
+"""
+
+# ---------------------------------------------------------------------------
+# Screen classes
+# ---------------------------------------------------------------------------
+
+
+class StartScreen(Screen):
+    pass
+
+
+class StoryScreen(Screen):
+    page_text = StringProperty(STORY_PAGES[0])
+    at_first_page = BooleanProperty(True)
+    _index = 0
+
+    def advance(self):
+        if self._index < len(STORY_PAGES) - 1:
+            self._index += 1
+            self.page_text = STORY_PAGES[self._index]
+            self.at_first_page = (self._index == 0)
+        else:
+            self.manager.current = 'class_select'
+            self._index = 0
+            self.page_text = STORY_PAGES[0]
+            self.at_first_page = True
+
+    def go_back(self):
+        if self._index > 0:
+            self._index -= 1
+            self.page_text = STORY_PAGES[self._index]
+            self.at_first_page = (self._index == 0)
+
+
+class ClassSelectScreen(Screen):
+    def choose_class(self, class_name):
+        app = App.get_running_app()
+        app.current_class = class_name
+        app.player = Character(class_name, CLASS_MAX_HEALTH[class_name])
+        confirm = self.manager.get_screen('class_confirm')
+        confirm.set_class(class_name)
+        self.manager.current = 'class_confirm'
+
+
+class ClassConfirmScreen(Screen):
+    confirm_text = StringProperty('')
+    image_source = StringProperty('')
+
+    def set_class(self, class_name):
+        self.confirm_text = f'You have chosen the {class_name} class?'
+        image_files = {
+            'warrior': 'Warrior.png',
+            'archer': 'Archer.png',
+            'wizard': 'Wizard.png',
+        }
+        self.image_source = image_files[class_name]
+
+    def confirm_yes(self):
+        app = App.get_running_app()
+        intro_screen = self.manager.get_screen('journal_intro')
+        intro_screen.intro_text = CLASS_INTROS[app.current_class]
+        self.manager.current = 'journal_intro'
+
+    def confirm_no(self):
+        self.manager.current = 'class_select'
+
+
+class JournalIntroScreen(Screen):
+    intro_text = StringProperty('')
+
+
+class GameScreen(Screen):
+    _built = False
+
+    def on_pre_enter(self, *args):
+        if self._built:
+            return
+        self._built = True
+
+        panel = TabbedPanel(do_default_tab=False)
+
+        main_tab = panel.tab_list and None  # placeholder, real tabs below
+        from kivy.uix.tabbedpanel import TabbedPanelItem
+        from kivy.uix.label import Label
+        from kivy.uix.image import Image
+
+        main_item = TabbedPanelItem(text='Main')
+        main_item.add_widget(Label(text='Main game area - wire up combat/dialogue here.'))
+        panel.add_widget(main_item)
+
+        inventory_item = TabbedPanelItem(text='Inventory')
+        inventory_item.add_widget(Label(text='Inventory - empty for now.'))
+        panel.add_widget(inventory_item)
+
+        map_item = TabbedPanelItem(text='Map')
+        map_item.add_widget(Image(source='Map.png'))
+        panel.add_widget(map_item)
+
+        journal_item = TabbedPanelItem(text='Journal')
+        journal_item.add_widget(Label(text='Journal - class intro log goes here.'))
+        panel.add_widget(journal_item)
+
+        self.add_widget(panel)
+
+
+# ---------------------------------------------------------------------------
+# App
+# ---------------------------------------------------------------------------
+
+
+class TurnikaApp(App):
+    current_class = ObjectProperty(None, allownone=True)
+    player = ObjectProperty(None, allownone=True)
+
+    def build(self):
+        Builder.load_string(KV)
+        manager = ScreenManager(transition=SlideTransition())
+        manager.add_widget(StartScreen())
+        manager.add_widget(StoryScreen())
+        manager.add_widget(ClassSelectScreen())
+        manager.add_widget(ClassConfirmScreen())
+        manager.add_widget(JournalIntroScreen())
+        manager.add_widget(GameScreen())
+        return manager
+
+
+if __name__ == '__main__':
+    TurnikaApp().run()

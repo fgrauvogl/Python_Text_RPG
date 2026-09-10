@@ -1,8 +1,9 @@
 [project]
 name = "python-text-rpg"
 version = "0.1.0"
-requires-python = ">=3.10"
+requires-python = ">=3.13,<3.14"
 dependencies = [
+    "kivy>=2.3.1",
     "pillow>=12.3.0",
     "pygame==2.6.1",
 ]
