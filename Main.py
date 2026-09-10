@@ -280,7 +280,7 @@ class ClassConfirmScreen(Screen):
     def set_class(self, class_name):
         self.confirm_text = f'You have chosen the {class_name} class?'
         image_files = {
-            'warrior': 'Warrior.png',
+            'warrior': 'Warrior_Photo.png',
             'archer': 'Archer.png',
             'wizard': 'Wizard.png',
         }
@@ -317,6 +317,7 @@ class GameScreen(Screen):
 
         main_item = TabbedPanelItem(text='Main')
         main_item.add_widget(Label(text='Main game area - wire up combat/dialogue here.'))
+        main_item.add_widget(Image(source='Warrior_Photo.png'))
         panel.add_widget(main_item)
 
         inventory_item = TabbedPanelItem(text='Inventory')
