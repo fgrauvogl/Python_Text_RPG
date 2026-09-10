@@ -1,7 +1,9 @@
 import tkinter as tk
+from tkinter import *
 from tkinter import ttk
 from PIL import ImageTk, Image
 import random
+import pygame
 #import Monsters
 
 # ---------------------------------------------------------------------------
@@ -18,19 +20,13 @@ level_nums = {
     3: random.randint(16, 24),
 }
 
-level_nums = {
-    1: random.randint(1, 8),
-    2: random.randint(8, 16),
-    3: random.randint(16, 24),
-}
-
 # high        -> value that counts as "too high", gets reset to high_reset
 # equal       -> a specific value that snaps to equal_reset (None if unused)
 # low         -> value below which it's treated as a miss and zeroed
 # gain_low    -> value below which gaining resets to gain_low_reset
 
 LEVEL_RULES = {
-    1: {"high": 8, "high_reset": 6, "equal": None, "equal_reset": None,
+    1: {"high": 8, "high_reset": 6, "equal": 0, "equal_reset": 0,
         "low": 1, "gain_low": 3, "gain_low_reset": 4},
     2: {"high": 16, "high_reset": 14, "equal": 6, "equal_reset": 8,
         "low": 5, "gain_low": 6, "gain_low_reset": 8},
@@ -50,8 +46,8 @@ def lose_health(level):
         value = 0
         print(f"Miss!{level}")
     level_nums[level] = value
- 
- 
+
+
 def gain_health(level):
     rules = LEVEL_RULES[level]
     value = level_nums[level]
@@ -71,14 +67,14 @@ class Character:
         self.max_health = max_health
         self.health = max_health
 
-def lose_health(self, amount):
-    self.health = max(0, self.health - amount)
+    def lose_health(self, amount):
+        self.health = max(0, self.health - amount)
 
-def gain_health(self, amount):
-    self.health = min(self.max_health, self.health + amount)
+    def gain_health(self, amount):
+        self.health = min(self.max_health, self.health + amount)
 
-def __repr__(self):
-    return f"Character({self.name}, {self.health}/{self.max_health})"
+    def __repr__(self):
+        return f"Character({self.name}, {self.health}/{self.max_health})"
 
 CLASS_MAX_HEALTH = {
     "warrior": 200,
@@ -86,18 +82,31 @@ CLASS_MAX_HEALTH = {
     "wizard": 100,
 }
 
+
+def get_screen_dimensions():
+    return {'width': int(pygame.display.Info().current_w), 'height': int(pygame.display.Info().current_h)}
+
 # ---------------------------------------------------------------------------
 # Window / tabs / images
 # ---------------------------------------------------------------------------
+screen_dimensions = get_screen_dimensions()
+width = screen_dimensions['width']
+height = screen_dimensions['height']
 
 game_window = tk.Tk()
 game_window.title('Turnika')
-game_window.geometry('1024x768')
+game_window.geometry("2560x1440")
+
+def main():
+    print(f"Screen Resolution: {width} x {height}")
+
+if __name__ == "__main__":
+    pygame.init()
 
 tabs = ttk.Notebook(game_window)
 tabs.pack(pady=5)
 
-sword = ImageTk.PhotoImage(Image.open('Sword1.png'))
+sword = ImageTk.PhotoImage(Image.open('Sword_New.png'))
 map_img = ImageTk.PhotoImage(Image.open('Map.png'))
 warrior_img = ImageTk.PhotoImage(Image.open('Warrior.png'))
 archer_img = ImageTk.PhotoImage(Image.open('Archer.png'))
@@ -126,18 +135,18 @@ welcome_label = tk.Label(game_window, text="Welcome to Turnika", font='Courier 1
 welcome_label.pack(pady=10)
 
 start_label = tk.Label(game_window, text='Start', font='Courier 18 bold', justify='center')
-start_label.pack(side=BOTTOM, pady=25)
+start_label.pack(side="bottom", pady=25)
 
 start_button = tk.Button(game_window, image=sword, justify='center', command=clear_start, cursor='hand2')
-start_button.pack(side=BOTTOM, pady=50)
+start_button.pack(side="bottom")
 
 # Main Tab First Story Lines
 first_story = tk.Label(main_frame, text='In an age when steel sang and sorcery ran deep, three sovereigns held the realm.\n\n\n'
                                      'The steadfast Aldric of Velmora.\n\n\n'
                                      'The untamed Kaelen of Duskreach.\n\n\n'
-                                     'The queen Seraphine of Aurelia.', pady=40,
+                                     'The queen Seraphine of Aurelia.', pady=40, padx=50,
                     font='Courier 13')
-first_story.pack(pady=10)
+first_story.pack(pady=40,padx=50)
 
 second_story = tk.Label(main_frame, text='For generations the lands rested in quiet harmony under their watch.\n\n\n'
                                       'Then a creeping blight seeped into the soil and the blood alike.\n\n\n'
@@ -203,16 +212,16 @@ def finish_intro():
 
 
 continue_button = tk.Button(main_frame, text='Continue', command=advance_story, cursor='hand2')
-continue_button.pack(side=tk.RIGHT, padx=15)
+continue_button.pack(side="right", padx=15)
 
 back_button = tk.Button(main_frame, text='Back', command=go_back, cursor='hand2', state='disabled')
-back_button.pack(side=tk.LEFT, padx=15)
+back_button.pack(side="left", padx=15)
 
 
 # ---------------------------------------------------------------------------
 # Class intro screens (journal tab)
 # ---------------------------------------------------------------------------
- 
+
 a_intro = tk.LabelFrame(journal_frame,
                      text="Surviving the harsh wilds of your homeland taught you archery.\n"
                           "Your eyes are keen, your wit sharp.\n"
@@ -222,7 +231,7 @@ a_intro = tk.LabelFrame(journal_frame,
                           "The sound seems to be coming from the nearby town.\n"
                           "What do you do?",
                      font='Courier 13', pady=20)
- 
+
 war_intro = tk.Label(journal_frame,
                   text="You're strong — stronger than the rest. Brawn was always\n"
                        "the one feature you envied.\n"
@@ -231,10 +240,10 @@ war_intro = tk.Label(journal_frame,
                        "In the distance, screams echo from the center square.\n"
                        "What do you do?",
                   font='Courier 13', pady=20)
- 
+
 wiz_intro = tk.Label(journal_frame, text="e", font='Courier 13', pady=20)
- 
- 
+
+
 def explore():
     # Tear down the class-selection confirmation widgets...
     choose_label.destroy()
@@ -249,7 +258,7 @@ def explore():
     display_wizard.destroy()
     classY_button.destroy()
     classN_button.destroy()
- 
+
     # ...then show the matching journal intro. This is the block that was
     # previously floating outside any function (the IndentationError) and
     # checking is_archer/is_warrior/is_wizard flags that never got set.
@@ -270,12 +279,12 @@ display_archer = tk.Label(main_frame, image=archer_img)
 archer_header = tk.Label(main_frame, text='You have chosen the archer class?', font='Courier 18 bold', pady=10)
 display_wizard = tk.Label(main_frame, image=wizard_img)
 wizard_header = tk.Label(main_frame, text='You have chosen the wizard class?', font='Courier 18 bold', pady=10)
- 
+
 classY_button = tk.Button(main_frame, text='Yes', font='Courier 11 bold', cursor='hand2', padx=60, command=explore)
 classN_button = tk.Button(main_frame, text=' No ', font='Courier 11 bold', cursor='hand2', padx=20, command=lambda: return_screen())
- 
+
 choose_label = tk.Label(main_frame, text='Choose Your Character!', justify='center', font='Courier 18 bold')
- 
+
 warrior_button = tk.Button(main_frame, pady=10, text='Warrior', command=lambda: choose_class('warrior'),
                         cursor='hand2', font='Courier 18 bold')
 archer_button = tk.Button(main_frame, pady=10, text='Archer', command=lambda: choose_class('archer'),
@@ -294,12 +303,12 @@ def choose_class(class_name):
     global current_class, player
     current_class = class_name
     player = Character(class_name, CLASS_MAX_HEALTH[class_name])
- 
+
     choose_label.forget()
     warrior_button.forget()
     archer_button.forget()
     wizard_button.forget()
- 
+
     header, display = CLASS_WIDGETS[class_name]
     header.pack()
     display.pack()
@@ -319,7 +328,7 @@ def return_screen():
         display.forget()
     classY_button.forget()
     classN_button.forget()
- 
+
     current_class = None
     player = None
 
